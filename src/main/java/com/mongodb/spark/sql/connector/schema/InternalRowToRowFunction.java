@@ -52,17 +52,20 @@ final class InternalRowToRowFunction implements Function<InternalRow, Row>, Seri
     for (StructField field : schema.fields()) {
       ExprId exprId = NamedExpression.newExprId();
       AttributeReference attributeReference = new AttributeReference(
-              field.name(),
-              field.dataType(),
-              field.nullable(),
-              field.metadata(),
-              ExprId$.MODULE$.apply(exprId.id()),
-              JavaConverters.asScalaIteratorConverter(new ArrayList<String>().iterator()).asScala().toSeq());
+          field.name(),
+          field.dataType(),
+          field.nullable(),
+          field.metadata(),
+          ExprId$.MODULE$.apply(exprId.id()),
+          JavaConverters.asScalaIteratorConverter(new ArrayList<String>().iterator())
+              .asScala()
+              .toSeq());
       attributesList.add(attributeReference);
     }
 
-    Seq<Attribute> fields =
-            JavaConverters.asScalaIteratorConverter(attributesList.iterator()).asScala().toSeq();
+    Seq<Attribute> fields = JavaConverters.asScalaIteratorConverter(attributesList.iterator())
+        .asScala()
+        .toSeq();
 
     ExpressionEncoder<Row> rowEncoder = ExpressionEncoder.apply(schema);
 

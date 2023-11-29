@@ -57,12 +57,15 @@ final class RowToInternalRowFunction implements Function<Row, InternalRow>, Seri
           field.nullable(),
           field.metadata(),
           ExprId$.MODULE$.apply(exprId.id()),
-          JavaConverters.asScalaIteratorConverter(new ArrayList<String>().iterator()).asScala().toSeq());
+          JavaConverters.asScalaIteratorConverter(new ArrayList<String>().iterator())
+              .asScala()
+              .toSeq());
       attributesList.add(attributeReference);
     }
 
-    Seq<Attribute> fields =
-            JavaConverters.asScalaIteratorConverter(attributesList.iterator()).asScala().toSeq();
+    Seq<Attribute> fields = JavaConverters.asScalaIteratorConverter(attributesList.iterator())
+        .asScala()
+        .toSeq();
 
     ExpressionEncoder<Row> rowEncoder = ExpressionEncoder.apply(schema);
     this.serializer = rowEncoder.resolveAndBind(fields, SimpleAnalyzer$.MODULE$).createSerializer();
