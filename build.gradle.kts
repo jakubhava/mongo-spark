@@ -41,8 +41,8 @@ group = "org.mongodb.spark"
 description = "The official MongoDB Apache Spark Connect Connector."
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -50,8 +50,8 @@ repositories {
 }
 
 // Usage: ./gradlew -DscalaVersion=2.12 -DsparkVersion=3.1.2
-val scalaVersion = System.getProperty("scalaVersion", "2.13")
-val sparkVersion = System.getProperty("sparkVersion", "3.2.2")
+val scalaVersion = "2.12"
+val sparkVersion = "3.5.0"
 
 extra.apply {
     set("annotationsVersion", "22.0.0")
