@@ -31,8 +31,8 @@ plugins {
     checkstyle
     id("com.github.gmazzo.buildconfig") version "3.0.2"
     id("com.github.spotbugs") version "4.7.9"
-    id("com.diffplug.spotless") version "6.19.0"
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.diffplug.spotless") version "6.25.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 version = "10.3.0-SNAPSHOT"
@@ -189,29 +189,41 @@ tasks.withType<Test> {
         }
     }
 
-    addTestListener(object : TestListener {
-        override fun beforeTest(testDescriptor: TestDescriptor?) {}
-        override fun beforeSuite(suite: TestDescriptor?) {}
-        override fun afterTest(testDescriptor: TestDescriptor?, result: TestResult?) {}
-        override fun afterSuite(d: TestDescriptor?, r: TestResult?) {
-            if (d != null && r != null && d.parent == null) {
-                val resultsSummary = """Tests summary:
+    addTestListener(
+        object : TestListener {
+            override fun beforeTest(testDescriptor: TestDescriptor?) {}
+
+            override fun beforeSuite(suite: TestDescriptor?) {}
+
+            override fun afterTest(
+                testDescriptor: TestDescriptor?,
+                result: TestResult?,
+            ) {}
+
+            override fun afterSuite(
+                d: TestDescriptor?,
+                r: TestResult?,
+            ) {
+                if (d != null && r != null && d.parent == null) {
+                    val resultsSummary =
+                        """Tests summary:
                     | Scala Version: $scalaVersion,
                     | Spark Version: $sparkVersion,
                     | ${r.testCount} tests,
                     | ${r.successfulTestCount} succeeded,
                     | ${r.failedTestCount} failed,
                     | ${r.skippedTestCount} skipped
-                """.trimMargin().replace("\n", "")
+                        """.trimMargin().replace("\n", "")
 
-                val border = "=".repeat(resultsSummary.length)
-                logger.lifecycle("\n$border")
-                logger.lifecycle("Test result: ${r.resultType}")
-                logger.lifecycle(resultsSummary)
-                logger.lifecycle("${border}\n")
+                    val border = "=".repeat(resultsSummary.length)
+                    logger.lifecycle("\n$border")
+                    logger.lifecycle("Test result: ${r.resultType}")
+                    logger.lifecycle(resultsSummary)
+                    logger.lifecycle("${border}\n")
+                }
             }
-        }
-    })
+        },
+    )
 }
 
 // ===========================
@@ -364,7 +376,8 @@ tasks.register("publishArchives") {
 
     doFirst {
         if (gitVersion != version) {
-            val cause = """
+            val cause =
+                """
                 | Version mismatch:
                 | =================
                 |
@@ -375,7 +388,7 @@ tasks.register("publishArchives") {
                 |
                 | The project version does not match the git tag.
                 |
-            """.trimMargin()
+                """.trimMargin()
             throw GradleException(cause)
         } else {
             println("Publishing: ${project.name} : $gitVersion")
